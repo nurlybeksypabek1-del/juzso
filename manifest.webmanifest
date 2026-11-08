@@ -1,0 +1,9 @@
+{
+  "name": "Мой учебный план",
+  "short_name": "Мой план",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f6fb",
+  "theme_color": "#101827",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

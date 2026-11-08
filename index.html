@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>Мой учебный план</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="На главную"><span class="brand-mark">✦</span><span>мой план</span></a>
+    <div class="top-actions">
+      <span id="todayLabel" class="today-label"></span>
+      <button class="icon-btn" id="exportBtn" title="Экспорт прогресса" aria-label="Экспорт">↥</button>
+      <button class="icon-btn" id="importBtn" title="Импорт прогресса" aria-label="Импорт">↧</button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="welcome">
+      <div>
+        <p class="eyebrow">ТВОЯ НЕДЕЛЯ · БЕЗ ЛИШНЕГО ХАОСА</p>
+        <h1>Всё по полочкам<span>.</span></h1>
+        <p class="sub">Уроки, дедлайны и маленькие шаги к большой цели.</p>
+      </div>
+      <div class="week-nav">
+        <button class="icon-btn" id="prevWeek" aria-label="Предыдущая неделя">‹</button>
+        <div><strong id="weekRange">Эта неделя</strong><small id="weekNumber"></small></div>
+        <button class="icon-btn" id="nextWeek" aria-label="Следующая неделя">›</button>
+      </div>
+    </section>
+
+    <section class="stats">
+      <article class="stat-card">
+        <div class="stat-icon purple">✓</div>
+        <div><span class="stat-number" id="doneCount">0</span><span class="stat-caption">выполнено задач</span></div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon blue">◷</div>
+        <div><span class="stat-number" id="remainingCount">0</span><span class="stat-caption">осталось задач</span></div>
+      </article>
+      <article class="stat-card progress-card">
+        <div class="progress-top"><span>Прогресс недели</span><strong id="progressText">0%</strong></div>
+        <div class="progress-track"><div id="progressBar" class="progress-fill"></div></div>
+        <small>Не гонись за идеалом — двигайся стабильно.</small>
+      </article>
+    </section>
+
+    <nav class="tabs" aria-label="Разделы">
+      <button class="tab active" data-tab="overview">Обзор</button>
+      <button class="tab" data-tab="tasks">Задания <span id="taskBadge">0</span></button>
+      <button class="tab" data-tab="schedule">Расписание</button>
+    </nav>
+
+    <section id="overviewPanel" class="panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">СЕГОДНЯ</p><h2 id="dayHeading">Твой день</h2></div>
+        <button class="text-btn" id="goToday">К сегодня ↗</button>
+      </div>
+      <div id="todayLessons" class="lesson-list"></div>
+      <div class="section-heading task-heading">
+        <div><p class="eyebrow">НЕ ЗАБУДЬ</p><h2>Ближайшие задачи</h2></div>
+        <button class="text-btn" data-goto="tasks">Все задачи ↗</button>
+      </div>
+      <div id="upcomingTasks" class="task-list"></div>
+    </section>
+
+    <section id="tasksPanel" class="panel hidden">
+      <div class="section-heading">
+        <div><p class="eyebrow">ТВОЙ СПИСОК</p><h2>Задания на неделю</h2></div>
+        <select id="filterSelect" class="filter">
+          <option value="all">Все предметы</option>
+          <option value="МС">МС</option><option value="ТАР">ТАР</option>
+          <option value="МАТ">МАТ</option><option value="ИНФО">ИНФО</option>
+          <option value="Личное">Личное</option>
+        </select>
+      </div>
+      <form id="addTaskForm" class="add-task">
+        <input id="newTaskTitle" type="text" placeholder="Например: повторить тему по информатике" maxlength="90" required>
+        <select id="newTaskSubject" aria-label="Предмет">
+          <option>Личное</option><option>МС</option><option>ТАР</option><option>МАТ</option><option>ИНФО</option>
+        </select>
+        <select id="newTaskDay" aria-label="Дедлайн">
+          <option value="1">Понедельник</option><option value="2">Вторник</option><option value="3">Среда</option>
+          <option value="4">Четверг</option><option value="5">Пятница</option><option value="6">Суббота</option><option value="0">Воскресенье</option>
+        </select>
+        <button class="primary-btn" type="submit">+ Добавить</button>
+      </form>
+      <div class="filter-note">Отмечай выполненное галочкой. Свои задачи можно добавлять в любое время.</div>
+      <div id="allTasks" class="task-list"></div>
+    </section>
+
+    <section id="schedulePanel" class="panel hidden">
+      <div class="section-heading"><div><p class="eyebrow">ЗАНЯТИЯ ЕНТ</p><h2>Расписание недели</h2></div></div>
+      <div class="schedule-note">Ниже — постоянные занятия, которые ты указал. Домашние задания планируй отдельно, учитывая их реальную длительность.</div>
+      <div id="fullSchedule" class="schedule-grid"></div>
+    </section>
+
+    <footer class="footer">
+      <span>Твой темп важнее идеальной галочки.</span>
+      <button id="resetBtn" class="subtle-btn">Сбросить отметки недели</button>
+    </footer>
+  </main>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
